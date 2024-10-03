@@ -1,0 +1,18 @@
+{
+  "client": "legacy/axios",
+  "input": "https://staging.elimity.com/api/spec",
+  "name": "Client",
+  "output": {
+    "format": "prettier",
+    "path": "openapi"
+  },
+  "services": {
+    "filter": "^(?:POST /sources/{id}/connector-logs|POST /sources/{id}/snapshots)$"
+  },
+  "types": {
+    "dates": true,
+    "include": "^(?:ConnectorLog|ConnectorLogLevel|ConnectorLogs|DateTime|Snapshot)$",
+    "name": "PascalCase"
+  },
+  "useOptions": false
+}
