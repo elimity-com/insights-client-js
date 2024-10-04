@@ -1,0 +1,111 @@
+{
+  "entities": [
+    {
+      "attributeAssignments": [
+        {
+          "attributeTypeId": "firstName",
+          "value": {
+            "type": "string",
+            "value": "Donald"
+          }
+        },
+        {
+          "attributeTypeId": "lastLogon",
+          "value": {
+            "type": "dateTime",
+            "value": {
+              "day": 16,
+              "hour": 12,
+              "minute": 56,
+              "month": 11,
+              "second": 3,
+              "year": 2022
+            }
+          }
+        },
+        {
+          "attributeTypeId": "lastName",
+          "value": {
+            "type": "string",
+            "value": "Duck"
+          }
+        }
+      ],
+      "id": "1",
+      "name": "dduck",
+      "type": "user"
+    },
+    {
+      "attributeAssignments": [
+        {
+          "attributeTypeId": "firstName",
+          "value": {
+            "type": "string",
+            "value": "Mickey"
+          }
+        },
+        {
+          "attributeTypeId": "lastName",
+          "value": {
+            "type": "string",
+            "value": "Mouse"
+          }
+        }
+      ],
+      "id": "2",
+      "name": "mmouse",
+      "type": "user"
+    },
+    {
+      "attributeAssignments": [
+        {
+          "attributeTypeId": "securityLevel",
+          "value": {
+            "type": "number",
+            "value": 0
+          }
+        }
+      ],
+      "id": "1",
+      "name": "Reader",
+      "type": "role"
+    },
+    {
+      "attributeAssignments": [
+        {
+          "attributeTypeId": "securityLevel",
+          "value": {
+            "type": "number",
+            "value": 1
+          }
+        }
+      ],
+      "id": "2",
+      "name": "Writer",
+      "type": "role"
+    }
+  ],
+  "relationships": [
+    {
+      "attributeAssignments": [],
+      "fromEntityId": "1",
+      "fromEntityType": "user",
+      "toEntityId": "1",
+      "toEntityType": "role"
+    },
+    {
+      "attributeAssignments": [],
+      "fromEntityId": "2",
+      "fromEntityType": "user",
+      "toEntityId": "1",
+      "toEntityType": "role"
+    },
+    {
+      "attributeAssignments": [],
+      "fromEntityId": "2",
+      "fromEntityType": "user",
+      "toEntityId": "2",
+      "toEntityType": "role"
+    }
+  ]
+}

@@ -4,6 +4,8 @@ This NodeJS package provides a client for connector interactions with an Elimity
 
 ## Usage
 
+### Minimal example
+
 The following snippet shows how to authenticate as a custom source and create a connector log at an Elimity Insights
 server. You can generate a source identifier and token by visiting the custom source's detail page in Elimity Insights
 and clicking the 'GENERATE CREDENTIALS' button, which can be found under the 'SETTINGS' tab.
@@ -18,6 +20,12 @@ const config = {
 };
 await logInfo(config, "Hello from NodeJS!");
 ```
+
+### Extended example
+
+Refer to
+[the `example` directory in this package's GitHub repository](https://github.com/elimity-com/insights-client-js/tree/main/example)
+for a sample script that imports some users, roles and relationships between them.
 
 ## Installation
 
