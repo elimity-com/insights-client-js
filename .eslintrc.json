@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["openapi/"],
+  "ignorePatterns": ["example/", "openapi/"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
