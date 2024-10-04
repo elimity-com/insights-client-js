@@ -7,9 +7,7 @@ jobs:
       - run: npm ci
       - run: npm version --no-git-tag-version ${{ github.event.release.tag_name }}
       - run: npx tsc
-      - env:
-          NPM_CONFIG_//registry.npmjs.org/:_authToken: ${{ secrets.NPM_TOKEN }}
-        run: npm publish
+      - run: env NPM_CONFIG_//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }} npm publish
 
 on:
   release:

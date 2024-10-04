@@ -18,6 +18,6 @@
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "name": "@elimity/insights-client",
-  "repository": "https://github.com/elimity-com/insights-client-js",
+  "repository": "elimity-com/insights-client-js",
   "types": "dist/index.d.ts"
 }
