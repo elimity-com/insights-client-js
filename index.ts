@@ -1,5 +1,6 @@
 import { Client, ConnectorLogLevel, SourceService } from "./openapi";
-import { deflateSync } from "node:zlib";
+import { Deflate } from "pako";
+import { stringifyChunked } from "@discoveryjs/json-ext";
 
 /** Represents the assignment of a value for a specific attribute type to a specific entity or relationship. */
 export interface AttributeAssignment {
@@ -131,10 +132,12 @@ export function performImport(
     entities,
     relationships,
   };
-  const string = JSON.stringify(graph);
-  const buffer = deflateSync(string);
-  const buffers = [buffer];
-  const blob = new Blob(buffers);
+  const generator = stringifyChunked(graph);
+  const deflate = new Deflate();
+  for (const chunk of generator) deflate.push(chunk);
+  deflate.push("", true);
+  const parts = [deflate.result];
+  const blob = new Blob(parts);
   return service.reloadSourceSnapshot(config.sourceId, blob);
 }
 
