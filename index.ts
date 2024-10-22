@@ -1,6 +1,7 @@
 import { Client, ConnectorLogLevel, SourceService } from "./openapi";
 import { Deflate } from "pako";
-import { stringifyChunked } from "@discoveryjs/json-ext";
+import { JsonStreamStringify } from "json-stream-stringify";
+import { Readable } from "node:stream";
 
 /** Represents the assignment of a value for a specific attribute type to a specific entity or relationship. */
 export interface AttributeAssignment {
@@ -122,23 +123,25 @@ export function logInfo(config: Config, message: string): Promise<void> {
 }
 
 /** Sends the given entities and relationships to the configured Elimity Insights server. */
-export function performImport(
+export async function performImport(
   config: Config,
-  entities: readonly Entity[],
-  relationships: readonly Relationship[],
+  entities: AsyncIterable<Entity> | Iterable<Entity>,
+  relationships: AsyncIterable<Relationship> | Iterable<Relationship>,
 ): Promise<void> {
   const service = createService(config);
+  const entityStream = Readable.from(entities);
+  const relationshipStream = Readable.from(relationships);
   const graph = {
-    entities,
-    relationships,
+    entities: entityStream,
+    relationships: relationshipStream,
   };
-  const generator = stringifyChunked(graph);
+  const stringify = new JsonStreamStringify(graph);
   const deflate = new Deflate();
-  for (const chunk of generator) deflate.push(chunk);
+  for await (const chunk of stringify) deflate.push(chunk as string);
   deflate.push("", true);
   const parts = [deflate.result];
   const blob = new Blob(parts);
-  return service.reloadSourceSnapshot(config.sourceId, blob);
+  await service.reloadSourceSnapshot(config.sourceId, blob);
 }
 
 function createService(config: Config): SourceService {
