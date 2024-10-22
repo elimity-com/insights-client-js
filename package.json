@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "@discoveryjs/json-ext": "^0.6.1",
     "@types/node": "^22.7.5",
     "axios": "^1.7.7",
+    "json-stream-stringify": "^3.1.6",
     "pako": "^2.1.0"
   },
   "description": "Client for connector interactions with an Elimity Insights server",
