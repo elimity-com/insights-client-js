@@ -6,4 +6,9 @@ const config = {
   sourceId: 1,
   sourceToken: "my-token",
 };
-await performImport(config, fixture.entities, fixture.relationships);
+await performImport(
+  config,
+  fixture.entities,
+  fixture.relationships,
+  fixture.streamItems,
+);

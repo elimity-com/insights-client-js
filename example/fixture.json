@@ -69,20 +69,6 @@
       "id": "1",
       "name": "Reader",
       "type": "role"
-    },
-    {
-      "attributeAssignments": [
-        {
-          "attributeTypeId": "securityLevel",
-          "value": {
-            "type": "number",
-            "value": 1
-          }
-        }
-      ],
-      "id": "2",
-      "name": "Writer",
-      "type": "role"
     }
   ],
   "relationships": [
@@ -99,13 +85,35 @@
       "fromEntityType": "user",
       "toEntityId": "1",
       "toEntityType": "role"
+    }
+  ],
+  "streamItems": [
+    {
+      "entity": {
+        "attributeAssignments": [
+          {
+            "attributeTypeId": "securityLevel",
+            "value": {
+              "type": "number",
+              "value": 1
+            }
+          }
+        ],
+        "id": "2",
+        "name": "Writer",
+        "type": "role"
+      },
+      "type": "entity"
     },
     {
-      "attributeAssignments": [],
-      "fromEntityId": "2",
-      "fromEntityType": "user",
-      "toEntityId": "2",
-      "toEntityType": "role"
+      "relationship": {
+        "attributeAssignments": [],
+        "fromEntityId": "2",
+        "fromEntityType": "user",
+        "toEntityId": "2",
+        "toEntityType": "role"
+      },
+      "type": "relationship"
     }
   ]
 }

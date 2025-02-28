@@ -38,3 +38,4 @@ $ npm i @elimity/insights-client
 | Client version | Insights version |
 | -------------- | ---------------- |
 | 1              | >=3.35           |
+| 2              | >=3.38           |
