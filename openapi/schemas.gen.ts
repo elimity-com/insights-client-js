@@ -166,10 +166,13 @@ export const accessReviewFormSchema = {
     "columnGroups",
     "createdAt",
     "dueDate",
+    "relationshipChanges",
     "relationships",
     "rowGroups",
     "rowQuestion",
-    "submitted",
+    "rowRemovals",
+    "submissionFinal",
+    "submittedAt",
     "toolbarBackgroundColor",
     "welcomeScreenHtml",
   ],
@@ -186,6 +189,9 @@ export const accessReviewFormSchema = {
     columnGroups: {
       $ref: "#/definitions/accessReviewHeaderGroups",
     },
+    relationshipChanges: {
+      $ref: "#/definitions/accessReviewRelationshipChanges",
+    },
     relationships: {
       $ref: "#/definitions/accessReviewRelationships",
     },
@@ -195,8 +201,18 @@ export const accessReviewFormSchema = {
     rowQuestion: {
       type: "string",
     },
-    submitted: {
+    rowRemovals: {
+      $ref: "#/definitions/accessReviewRowRemovals",
+    },
+    submissionComment: {
+      type: "string",
+      "x-nullable": true,
+    },
+    submissionFinal: {
       type: "boolean",
+    },
+    submittedAt: {
+      $ref: "#/definitions/dateTime",
     },
     toolbarBackgroundColor: {
       type: "string",
@@ -595,10 +611,19 @@ export const accessReviewRowRemovalsSchema = {
 
 export const accessReviewSubmissionSchema = {
   type: "object",
-  required: ["comment", "relationshipChanges", "rowRemovals", "token"],
+  required: [
+    "comment",
+    "isFinal",
+    "relationshipChanges",
+    "rowRemovals",
+    "token",
+  ],
   properties: {
     comment: {
       type: "string",
+    },
+    isFinal: {
+      type: "boolean",
     },
     relationshipChanges: {
       $ref: "#/definitions/accessReviewSubmissionRelationshipChanges",
@@ -956,6 +981,11 @@ export const attributeTypesSchema = {
 export const authModeSchema = {
   type: "string",
   enum: ["oidc", "password"],
+} as const;
+
+export const autofillPropertySchema = {
+  type: "string",
+  pattern: "^(attribute:.*|id|name)$",
 } as const;
 
 export const badRequestResponseSchema = {
@@ -1343,6 +1373,46 @@ export const campaignTemplateGroupAssignmentSchema = {
     },
     status: {
       $ref: "#/definitions/campaignTemplateGroupAssignmentStatus",
+    },
+  },
+} as const;
+
+export const campaignTemplateGroupAssignmentAutofillSchema = {
+  type: "object",
+  required: [
+    "emailProperty",
+    "entityTypeId",
+    "matchOperator",
+    "matchProperty",
+    "matchReverse",
+    "nameProperty",
+    "overrideExisting",
+    "sourceId",
+  ],
+  properties: {
+    emailProperty: {
+      $ref: "#/definitions/autofillProperty",
+    },
+    entityTypeId: {
+      type: "string",
+    },
+    matchOperator: {
+      type: "string",
+    },
+    matchProperty: {
+      $ref: "#/definitions/autofillProperty",
+    },
+    matchReverse: {
+      type: "boolean",
+    },
+    nameProperty: {
+      $ref: "#/definitions/autofillProperty",
+    },
+    overrideExisting: {
+      type: "boolean",
+    },
+    sourceId: {
+      type: "integer",
     },
   },
 } as const;
@@ -3917,6 +3987,22 @@ export const storedQueryDataSchema = {
     },
     entityType: {
       type: "string",
+    },
+  },
+} as const;
+
+export const storedQueryDefinitionSchema = {
+  type: "object",
+  required: ["condition", "entityType", "sourceId"],
+  properties: {
+    condition: {
+      $ref: "#/definitions/rawMessage",
+    },
+    entityType: {
+      type: "string",
+    },
+    sourceId: {
+      type: "integer",
     },
   },
 } as const;

@@ -59,6 +59,11 @@ export interface Entity {
   readonly type: string;
 }
 
+export interface EntityStreamItem {
+  readonly entity: Entity;
+  readonly type: StreamItemType.Entity;
+}
+
 /** Represents a number attribute assignment value. */
 export interface NumberValue {
   readonly type: ValueType.Number;
@@ -72,6 +77,18 @@ export interface Relationship {
   readonly fromEntityType: string;
   readonly toEntityId: string;
   readonly toEntityType: string;
+}
+
+export interface RelationshipStreamItem {
+  readonly relationship: Relationship;
+  readonly type: StreamItemType.Relationship;
+}
+
+export type StreamItem = EntityStreamItem | RelationshipStreamItem;
+
+export enum StreamItemType {
+  Entity = "entity",
+  Relationship = "relationship",
 }
 
 /** Represents a string attribute assignment value. */
@@ -127,13 +144,16 @@ export async function performImport(
   config: Config,
   entities: AsyncIterable<Entity> | Iterable<Entity>,
   relationships: AsyncIterable<Relationship> | Iterable<Relationship>,
+  streamItems: AsyncIterable<StreamItem> | Iterable<StreamItem>,
 ): Promise<void> {
   const service = createService(config);
   const entityStream = Readable.from(entities);
   const relationshipStream = Readable.from(relationships);
+  const itemStream = Readable.from(streamItems);
   const graph = {
     entities: entityStream,
     relationships: relationshipStream,
+    streamItems: itemStream,
   };
   const stringify = new JsonStreamStringify(graph);
   const deflate = new Deflate();
