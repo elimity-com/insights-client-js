@@ -7,7 +7,7 @@
   },
   "description": "Client for connector interactions with an Elimity Insights server",
   "devDependencies": {
-    "@hey-api/openapi-ts": "^0.53.6",
+    "@hey-api/openapi-ts": "^0.90.4",
     "@types/pako": "^2.0.3",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
