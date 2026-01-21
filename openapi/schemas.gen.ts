@@ -978,11 +978,6 @@ export const attributeTypesSchema = {
   },
 } as const;
 
-export const authModeSchema = {
-  type: "string",
-  enum: ["oidc", "password"],
-} as const;
-
 export const autofillPropertySchema = {
   type: "string",
   pattern: "^(attribute:.*|id|name)$",
@@ -1602,19 +1597,8 @@ export const changeRequestStatusSchema = {
 } as const;
 
 export const configFileSchema = {
-  required: [
-    "enableOIDCAuthentication",
-    "enablePasswordAuthentication",
-    "organisationName",
-    "usageLogRetentionYears",
-  ],
+  required: ["organisationName", "usageLogRetentionYears"],
   properties: {
-    enableOIDCAuthentication: {
-      type: "boolean",
-    },
-    enablePasswordAuthentication: {
-      type: "boolean",
-    },
     lastDataImport: {
       $ref: "#/definitions/optionalDateTime",
     },
@@ -1784,6 +1768,232 @@ export const connectorLogsPageSchema = {
 export const connectorTypeSchema = {
   type: "string",
   enum: ["builtIn", "custom"],
+} as const;
+
+export const customGatewayConfigurationSchema = {
+  type: "object",
+  required: ["enabled", "schedule", "url", "values"],
+  properties: {
+    enabled: {
+      type: "boolean",
+    },
+    schedule: {
+      type: "string",
+    },
+    url: {
+      type: "string",
+    },
+    values: {
+      $ref: "#/definitions/customGatewayConfigurationValues",
+    },
+  },
+} as const;
+
+export const customGatewayConfigurationInputSchema = {
+  type: "object",
+  required: ["enabled", "runImmediately", "schedule", "url", "values"],
+  properties: {
+    enabled: {
+      type: "boolean",
+    },
+    runImmediately: {
+      type: "boolean",
+    },
+    schedule: {
+      type: "string",
+    },
+    url: {
+      type: "string",
+    },
+    values: {
+      $ref: "#/definitions/customGatewayConfigurationValueInputs",
+    },
+  },
+} as const;
+
+export const customGatewayConfigurationSecretFileSchema = {
+  type: "string",
+  format: "byte",
+} as const;
+
+export const customGatewayConfigurationValueSchema = {
+  type: "object",
+  required: ["jsonValue", "key", "textValue", "textareaValue", "type"],
+  properties: {
+    jsonValue: {},
+    key: {
+      type: "string",
+    },
+    textValue: {
+      type: "string",
+    },
+    textareaValue: {
+      type: "string",
+    },
+    type: {
+      $ref: "#/definitions/customGatewayConfigurationValueType",
+    },
+  },
+} as const;
+
+export const customGatewayConfigurationValueInputSchema = {
+  type: "object",
+  required: [
+    "key",
+    "passwordValue",
+    "secretFileValue",
+    "textValue",
+    "textareaValue",
+    "type",
+  ],
+  properties: {
+    jsonValue: {},
+    key: {
+      type: "string",
+    },
+    passwordValue: {
+      type: "string",
+    },
+    secretFileValue: {
+      $ref: "#/definitions/customGatewayConfigurationSecretFile",
+    },
+    textValue: {
+      type: "string",
+    },
+    textareaValue: {
+      type: "string",
+    },
+    type: {
+      $ref: "#/definitions/customGatewayConfigurationValueType",
+    },
+  },
+} as const;
+
+export const customGatewayConfigurationValueInputsSchema = {
+  type: "array",
+  items: {
+    $ref: "#/definitions/customGatewayConfigurationValueInput",
+  },
+} as const;
+
+export const customGatewayConfigurationValueTypeSchema = {
+  type: "string",
+  enum: ["json", "password", "secretFile", "text", "textarea"],
+} as const;
+
+export const customGatewayConfigurationValuesSchema = {
+  type: "array",
+  items: {
+    $ref: "#/definitions/customGatewayConfigurationValue",
+  },
+} as const;
+
+export const customMailServerConfigurationSchema = {
+  type: "object",
+  required: [
+    "enableAuth",
+    "enableCustomMailServer",
+    "enableOAuth2",
+    "fromAddress",
+    "oAuth2ClientId",
+    "oAuth2Scope",
+    "oAuth2TokenUrl",
+    "smtpHost",
+    "smtpPort",
+    "smtpUsername",
+    "supportCustomMailServer",
+  ],
+  properties: {
+    enableAuth: {
+      type: "boolean",
+    },
+    enableCustomMailServer: {
+      type: "boolean",
+    },
+    enableOAuth2: {
+      type: "boolean",
+    },
+    fromAddress: {
+      type: "string",
+    },
+    oAuth2ClientId: {
+      type: "string",
+    },
+    oAuth2Scope: {
+      type: "string",
+    },
+    oAuth2TokenUrl: {
+      type: "string",
+    },
+    smtpHost: {
+      type: "string",
+    },
+    smtpPort: {
+      type: "integer",
+    },
+    smtpUsername: {
+      type: "string",
+    },
+    supportCustomMailServer: {
+      type: "boolean",
+    },
+  },
+} as const;
+
+export const customMailServerConfigurationUpdateSchema = {
+  type: "object",
+  required: [
+    "enableAuth",
+    "enableCustomMailServer",
+    "enableOAuth2",
+    "fromAddress",
+    "oAuth2ClientId",
+    "oAuth2ClientSecret",
+    "oAuth2Scope",
+    "oAuth2TokenUrl",
+    "smtpHost",
+    "smtpPassword",
+    "smtpPort",
+    "smtpUsername",
+  ],
+  properties: {
+    enableAuth: {
+      type: "boolean",
+    },
+    enableCustomMailServer: {
+      type: "boolean",
+    },
+    enableOAuth2: {
+      type: "boolean",
+    },
+    fromAddress: {
+      type: "string",
+    },
+    oAuth2ClientId: {
+      type: "string",
+    },
+    oAuth2ClientSecret: {
+      type: "string",
+    },
+    oAuth2Scope: {
+      type: "string",
+    },
+    oAuth2TokenUrl: {
+      type: "string",
+    },
+    smtpHost: {
+      type: "string",
+    },
+    smtpPassword: {
+      type: "string",
+    },
+    smtpPort: {
+      type: "integer",
+    },
+    smtpUsername: {
+      type: "string",
+    },
+  },
 } as const;
 
 export const customSourceInputSchema = {
@@ -2155,7 +2365,7 @@ export const entityTypeSchema = {
 
 export const entityTypeDetailsSchema = {
   type: "object",
-  required: ["anonymized", "icon", "plural", "singular"],
+  required: ["anonymized", "icon", "plural", "singular", "viewIndex"],
   properties: {
     anonymized: {
       type: "boolean",
@@ -2168,6 +2378,9 @@ export const entityTypeDetailsSchema = {
     },
     singular: {
       type: "string",
+    },
+    viewIndex: {
+      type: "integer",
     },
   },
 } as const;
@@ -2382,6 +2595,41 @@ export const invitesSchema = {
   type: "array",
   items: {
     $ref: "#/definitions/invite",
+  },
+} as const;
+
+export const itsmWebhookConfigurationSchema = {
+  type: "object",
+  required: ["enabled", "url", "username"],
+  properties: {
+    enabled: {
+      type: "boolean",
+    },
+    url: {
+      type: "string",
+    },
+    username: {
+      type: "string",
+    },
+  },
+} as const;
+
+export const itsmWebhookConfigurationUpdateSchema = {
+  type: "object",
+  required: ["enabled", "password", "url", "username"],
+  properties: {
+    enabled: {
+      type: "boolean",
+    },
+    password: {
+      type: "string",
+    },
+    url: {
+      type: "string",
+    },
+    username: {
+      type: "string",
+    },
   },
 } as const;
 
@@ -2786,29 +3034,6 @@ export const optionalHandlesSchema = {
   },
 } as const;
 
-export const passwordResetBodySchema = {
-  type: "object",
-  required: ["newPassword", "token"],
-  properties: {
-    newPassword: {
-      type: "string",
-    },
-    token: {
-      type: "string",
-    },
-  },
-} as const;
-
-export const passwordResetRequestBodySchema = {
-  type: "object",
-  required: ["email"],
-  properties: {
-    email: {
-      type: "string",
-    },
-  },
-} as const;
-
 export const peerReviewCollectionSchema = {
   type: "object",
   required: [
@@ -3059,11 +3284,8 @@ export const positiveIntegerSchema = {
 
 export const profileSchema = {
   type: "object",
-  required: ["authMode", "email", "firstName", "id", "lastName", "role"],
+  required: ["email", "firstName", "id", "lastName", "role"],
   properties: {
-    authMode: {
-      $ref: "#/definitions/authMode",
-    },
     email: {
       type: "string",
     },
@@ -3668,6 +3890,7 @@ export const roleBodySchema = {
 } as const;
 
 export const scopeSchema = {
+  type: "object",
   required: [
     "description",
     "id",
@@ -3775,68 +3998,19 @@ export const sourceSchema = {
   },
 } as const;
 
-export const sourceCsvImportSchema = {
-  type: "object",
-  required: ["snapshot"],
-  properties: {
-    configuration: {
-      $ref: "#/definitions/sourceCsvImportConfiguration",
-    },
-    snapshot: {
-      $ref: "#/definitions/sourceCsvImportSnapshot",
-    },
-  },
-} as const;
-
-export const sourceCsvImportConfigurationSchema = {
-  type: "object",
-  required: [
-    "dateFormat",
-    "dateTimeFormat",
-    "delimiter",
-    "emptyValue",
-    "timeFormat",
-    "trimWhitespace",
-  ],
-  properties: {
-    dateFormat: {
-      type: "string",
-    },
-    dateTimeFormat: {
-      type: "string",
-    },
-    delimiter: {
-      type: "string",
-    },
-    emptyValue: {
-      type: "string",
-    },
-    timeFormat: {
-      type: "string",
-    },
-    trimWhitespace: {
-      type: "boolean",
-    },
-  },
-} as const;
-
-export const sourceCsvImportSnapshotSchema = {
-  type: "string",
-  format: "byte",
-} as const;
-
 export const sourceDetailsSchema = {
   type: "object",
   required: [
     "archived",
     "connector",
-    "csvImportDateFormat",
-    "csvImportDateTimeFormat",
-    "csvImportDelimiter",
-    "csvImportEmptyValue",
-    "csvImportTimeFormat",
-    "csvImportTrimWhitespace",
+    "customGatewayConfigurationEnabled",
+    "customGatewayConfigurationSchedule",
+    "customGatewayConfigurationUrl",
+    "customGatewayConfigurationValues",
     "domainGraphSchema",
+    "fileUploadDefinitions",
+    "fileUploadEntityQueries",
+    "fileUploadRelationshipQueries",
     "healthCheckEmailAddresses",
     "healthCheckSnapshotMaxAge",
     "manualImportDisabled",
@@ -3850,26 +4024,29 @@ export const sourceDetailsSchema = {
     connector: {
       $ref: "#/definitions/connector",
     },
-    csvImportDateFormat: {
-      type: "string",
-    },
-    csvImportDateTimeFormat: {
-      type: "string",
-    },
-    csvImportDelimiter: {
-      type: "string",
-    },
-    csvImportEmptyValue: {
-      type: "string",
-    },
-    csvImportTimeFormat: {
-      type: "string",
-    },
-    csvImportTrimWhitespace: {
+    customGatewayConfigurationEnabled: {
       type: "boolean",
+    },
+    customGatewayConfigurationSchedule: {
+      type: "string",
+    },
+    customGatewayConfigurationUrl: {
+      type: "string",
+    },
+    customGatewayConfigurationValues: {
+      $ref: "#/definitions/customGatewayConfigurationValues",
     },
     domainGraphSchema: {
       $ref: "#/definitions/domainGraphSchema",
+    },
+    fileUploadDefinitions: {
+      $ref: "#/definitions/sourceFileUploadDefinitions",
+    },
+    fileUploadEntityQueries: {
+      $ref: "#/definitions/sourceFileUploadQueries",
+    },
+    fileUploadRelationshipQueries: {
+      $ref: "#/definitions/sourceFileUploadQueries",
     },
     healthCheckEmailAddresses: {
       $ref: "#/definitions/strings",
@@ -3886,6 +4063,176 @@ export const sourceDetailsSchema = {
     queryResultHistoryRetentionYears: {
       $ref: "#/definitions/retentionYears",
     },
+  },
+} as const;
+
+export const sourceFileUploadAttributeTypeSchema = {
+  type: "object",
+  required: ["externalId", "id", "label", "type", "archived"],
+  properties: {
+    archived: {
+      type: "boolean",
+    },
+    externalId: {
+      type: "string",
+    },
+    id: {
+      type: "integer",
+    },
+    label: {
+      type: "string",
+    },
+    type: {
+      type: "string",
+    },
+  },
+} as const;
+
+export const sourceFileUploadAttributeTypesSchema = {
+  type: "array",
+  items: {
+    $ref: "#/definitions/sourceFileUploadAttributeType",
+  },
+} as const;
+
+export const sourceFileUploadConfigurationSchema = {
+  type: "object",
+  required: ["definitions", "entityQueries", "relationshipQueries"],
+  properties: {
+    definitions: {
+      $ref: "#/definitions/sourceFileUploadDefinitions",
+    },
+    entityQueries: {
+      $ref: "#/definitions/sourceFileUploadQueries",
+    },
+    relationshipQueries: {
+      $ref: "#/definitions/sourceFileUploadQueries",
+    },
+  },
+} as const;
+
+export const sourceFileUploadConfigurationInputSchema = {
+  type: "object",
+  required: ["definitions", "entityQueries", "relationshipQueries"],
+  properties: {
+    definitions: {
+      $ref: "#/definitions/sourceFileUploadDefinitions",
+    },
+    entityQueries: {
+      $ref: "#/definitions/sourceFileUploadQueryInputs",
+    },
+    relationshipQueries: {
+      $ref: "#/definitions/sourceFileUploadQueryInputs",
+    },
+  },
+} as const;
+
+export const sourceFileUploadDefinitionSchema = {
+  type: "object",
+  required: ["accept", "allowMultiple", "label"],
+  properties: {
+    accept: {
+      type: "string",
+    },
+    allowMultiple: {
+      type: "boolean",
+    },
+    label: {
+      type: "string",
+    },
+  },
+} as const;
+
+export const sourceFileUploadDefinitionsSchema = {
+  type: "array",
+  items: {
+    $ref: "#/definitions/sourceFileUploadDefinition",
+  },
+} as const;
+
+export const sourceFileUploadImportResultSchema = {
+  type: "object",
+  required: ["errorMessage", "skipImport", "successMessage"],
+  properties: {
+    errorMessage: {
+      type: "string",
+    },
+    skipImport: {
+      type: "boolean",
+    },
+    successMessage: {
+      type: "string",
+    },
+  },
+} as const;
+
+export const sourceFileUploadQueriesSchema = {
+  type: "array",
+  items: {
+    $ref: "#/definitions/sourceFileUploadQuery",
+  },
+} as const;
+
+export const sourceFileUploadQuerySchema = {
+  type: "object",
+  required: [
+    "attributeTypes",
+    "includedAttributeTypeIds",
+    "label",
+    "targetExternalId",
+    "targetFromExternalId",
+    "targetId",
+    "targetToExternalId",
+    "value",
+  ],
+  properties: {
+    attributeTypes: {
+      $ref: "#/definitions/sourceFileUploadAttributeTypes",
+    },
+    includedAttributeTypeIds: {
+      $ref: "#/definitions/uniqueIntegers",
+    },
+    label: {
+      type: "string",
+    },
+    targetExternalId: {
+      type: "string",
+    },
+    targetFromExternalId: {
+      type: "string",
+    },
+    targetId: {
+      type: "integer",
+    },
+    targetToExternalId: {
+      type: "string",
+    },
+    value: {
+      type: "string",
+    },
+  },
+} as const;
+
+export const sourceFileUploadQueryInputSchema = {
+  type: "object",
+  required: ["includedAttributeTypeIds", "targetId", "value"],
+  properties: {
+    includedAttributeTypeIds: {
+      $ref: "#/definitions/uniqueIntegers",
+    },
+    targetId: {
+      type: "integer",
+    },
+    value: {
+      type: "string",
+    },
+  },
+} as const;
+
+export const sourceFileUploadQueryInputsSchema = {
+  type: "array",
+  items: {
+    $ref: "#/definitions/sourceFileUploadQueryInput",
   },
 } as const;
 
@@ -4345,19 +4692,6 @@ export const uniqueIntegersSchema = {
   uniqueItems: true,
   items: {
     type: "integer",
-  },
-} as const;
-
-export const updatePasswordBodySchema = {
-  type: "object",
-  required: ["newPassword", "oldPassword"],
-  properties: {
-    newPassword: {
-      type: "string",
-    },
-    oldPassword: {
-      type: "string",
-    },
   },
 } as const;
 

@@ -1,6 +1,6 @@
 {
   "client": "legacy/axios",
-  "input": "https://staging.elimity.com/api/spec",
+  "input": "/root/swagger.json",
   "name": "Client",
   "output": {
     "format": "prettier",
