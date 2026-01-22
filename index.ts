@@ -1,7 +1,8 @@
-import { Client, ConnectorLogLevel, SourceService } from "./openapi";
+import { ConnectorLogLevel, Sdk } from "./openapi";
 import { Deflate } from "pako";
 import { JsonStreamStringify } from "json-stream-stringify";
 import { Readable } from "node:stream";
+import { createClient } from "./openapi/client";
 
 /** Represents the assignment of a value for a specific attribute type to a specific entity or relationship. */
 export interface AttributeAssignment {
@@ -146,7 +147,7 @@ export async function performImport(
   relationships: AsyncIterable<Relationship> | Iterable<Relationship>,
   streamItems: AsyncIterable<StreamItem> | Iterable<StreamItem>,
 ): Promise<void> {
-  const service = createService(config);
+  const sdk = makeSdk(config);
   const entityStream = Readable.from(entities);
   const relationshipStream = Readable.from(relationships);
   const itemStream = Readable.from(streamItems);
@@ -161,25 +162,32 @@ export async function performImport(
   deflate.push("", true);
   const parts = [deflate.result];
   const blob = new Blob(parts);
-  await service.reloadSourceSnapshot(config.sourceId, blob);
-}
-
-function createService(config: Config): SourceService {
-  const username = `${config.sourceId}`;
-  const con = {
-    BASE: config.baseUrl,
-    PASSWORD: config.sourceToken,
-    USERNAME: username,
+  const path = { id: config.sourceId };
+  const options = {
+    body: blob,
+    path,
   };
-  return new Client(con).source;
+  await sdk.reloadSourceSnapshot(options);
 }
 
-function log(
+function makeSdk(config: Config): Sdk {
+  const auth = `${config.sourceId}:${config.sourceToken}`;
+  const con = {
+    auth,
+    baseUrl: config.baseUrl,
+    throwOnError: true,
+  };
+  const client = createClient(con);
+  const args = { client };
+  return new Sdk(args);
+}
+
+async function log(
   config: Config,
   level: ConnectorLogLevel,
   message: string,
 ): Promise<void> {
-  const service = createService(config);
+  const sdk = makeSdk(config);
   const timestamp = new globalThis.Date();
   const log = {
     level,
@@ -187,5 +195,10 @@ function log(
     timestamp,
   };
   const logs = [log];
-  return service.createSourceConnectorLogs(config.sourceId, logs);
+  const path = { id: config.sourceId };
+  const options = {
+    body: logs,
+    path,
+  };
+  await sdk.createSourceConnectorLogs(options);
 }
