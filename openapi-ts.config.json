@@ -1,18 +1,29 @@
 {
-  "client": "legacy/axios",
   "input": "/root/swagger.json",
-  "name": "Client",
   "output": {
-    "format": "prettier",
-    "path": "openapi"
+    "path": "openapi",
+    "postProcess": ["prettier"]
   },
-  "services": {
-    "filter": "^(?:POST /sources/{id}/connector-logs|POST /sources/{id}/snapshots)$"
+  "parser": {
+    "filters": {
+      "operations": {
+        "include": [
+          "POST /sources/{id}/connector-logs",
+          "POST /sources/{id}/snapshots"
+        ]
+      }
+    }
   },
-  "types": {
-    "dates": true,
-    "include": "^(?:ConnectorLog|ConnectorLogLevel|ConnectorLogs|DateTime|Snapshot)$",
-    "name": "PascalCase"
-  },
-  "useOptions": false
+  "plugins": [
+    {
+      "name": "@hey-api/sdk",
+      "operations": {
+        "strategy": "single"
+      }
+    },
+    {
+      "dates": true,
+      "name": "@hey-api/transformers"
+    }
+  ]
 }
