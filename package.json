@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@types/node": "^22.7.5",
-    "axios": "^1.13.5",
+    "axios": "^1.15.0",
     "json-stream-stringify": "^3.1.6",
     "pako": "^2.1.0"
   },
