@@ -6,10 +6,7 @@ import type {
   Options as Options2,
   TDataShape,
 } from "./client/index.js";
-import {
-  getAgentSourcesResponseTransformer,
-  performAgentQueryResponseTransformer,
-} from "./transformers.gen.js";
+import { getAgentSourcesResponseTransformer } from "./transformers.gen.js";
 import type {
   CreateSourceConnectorLogsData,
   CreateSourceConnectorLogsErrors,
@@ -23,9 +20,6 @@ import type {
   GetAgentSourcesData,
   GetAgentSourcesErrors,
   GetAgentSourcesResponses,
-  PerformAgentQueryData,
-  PerformAgentQueryErrors,
-  PerformAgentQueryResponses,
   ReloadSourceSnapshotData,
   ReloadSourceSnapshotErrors,
   ReloadSourceSnapshotResponses,
@@ -83,25 +77,6 @@ export class Sdk extends HeyApiClient {
   constructor(args?: { client?: Client; key?: string }) {
     super(args);
     Sdk.__registry.set(this, args?.key);
-  }
-
-  public performAgentQuery<ThrowOnError extends boolean = false>(
-    options: Options<PerformAgentQueryData, ThrowOnError>,
-  ) {
-    return (options.client ?? this.client).post<
-      PerformAgentQueryResponses,
-      PerformAgentQueryErrors,
-      ThrowOnError
-    >({
-      responseTransformer: performAgentQueryResponseTransformer,
-      security: [{ scheme: "basic", type: "http" }],
-      url: "/agent/query",
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-    });
   }
 
   public getAgentScopes<ThrowOnError extends boolean = false>(

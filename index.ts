@@ -1,12 +1,4 @@
-import {
-  ConnectorLogLevel,
-  QueryResultsPage,
-  RawMessage,
-  Scope,
-  Sdk,
-  Source,
-  StoredQuery,
-} from "./openapi";
+import { ConnectorLogLevel, Scope, Sdk, Source, StoredQuery } from "./openapi";
 import { Deflate } from "pako";
 import { JsonStreamStringify } from "json-stream-stringify";
 import { Readable } from "node:stream";
@@ -180,18 +172,6 @@ export function logAlert(config: Config, message: string): Promise<void> {
 /** Sends the given informational log to the configured Elimity Insights server. */
 export function logInfo(config: Config, message: string): Promise<void> {
   return log(config, "info", message);
-}
-
-/** Performs the given agent queries and returns their result pages. */
-export async function performAgentQuery(
-  config: ApiTokenConfig,
-  messages: readonly RawMessage[],
-): Promise<readonly QueryResultsPage[]> {
-  const sdk = makeAgentSdk(config);
-  const { data } = await sdk.performAgentQuery<true>({
-    body: [...messages],
-  });
-  return data;
 }
 
 /** Sends the given entities and relationships to the configured Elimity Insights server. */
