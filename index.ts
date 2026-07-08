@@ -1,8 +1,26 @@
-import { ConnectorLogLevel, Sdk } from "./openapi";
+import {
+  ConnectorLogLevel,
+  QueryResultsPage,
+  RawMessage,
+  Scope,
+  Sdk,
+  Source,
+} from "./openapi";
+import {
+  getAgentSourcesResponseTransformer,
+  performAgentQueryResponseTransformer,
+} from "./openapi/transformers.gen";
 import { Deflate } from "pako";
 import { JsonStreamStringify } from "json-stream-stringify";
 import { Readable } from "node:stream";
 import { createClient } from "./openapi/client";
+
+/** Indicates how to connect and authenticate to an Elimity Insights server using an API token. */
+export interface ApiTokenConfig {
+  readonly baseUrl: string;
+  readonly tokenId: string;
+  readonly tokenSecret: string;
+}
 
 /** Represents the assignment of a value for a specific attribute type to a specific entity or relationship. */
 export interface AttributeAssignment {
@@ -130,6 +148,35 @@ export enum ValueType {
   Time = "time",
 }
 
+/** Lists the sources accessible with the given API token. */
+export async function getAgentSources(
+  config: ApiTokenConfig,
+): Promise<readonly Source[]> {
+  const sdk = makeAgentSdk(config);
+  const { data } = await sdk.getAgentSources<true>({
+    responseTransformer: getAgentSourcesResponseTransformer,
+  });
+  return data;
+}
+
+/** Lists the scopes accessible with the given API token. */
+export async function getAgentScopes(
+  config: ApiTokenConfig,
+): Promise<readonly Scope[]> {
+  const sdk = makeAgentSdk(config);
+  const { data } = await sdk.getAgentScopes<true>();
+  return data;
+}
+
+/** Lists the stored queries accessible with the given API token. */
+export async function getAgentStoredQueries(
+  config: ApiTokenConfig,
+): Promise<unknown> {
+  const sdk = makeAgentSdk(config);
+  const { data } = await sdk.getAgentStoredQueries<true>();
+  return data;
+}
+
 /** Sends the given warning log to the configured Elimity Insights server. */
 export function logAlert(config: Config, message: string): Promise<void> {
   return log(config, "alert", message);
@@ -138,6 +185,19 @@ export function logAlert(config: Config, message: string): Promise<void> {
 /** Sends the given informational log to the configured Elimity Insights server. */
 export function logInfo(config: Config, message: string): Promise<void> {
   return log(config, "info", message);
+}
+
+/** Performs the given agent queries and returns their result pages. */
+export async function performAgentQuery(
+  config: ApiTokenConfig,
+  messages: readonly RawMessage[],
+): Promise<readonly QueryResultsPage[]> {
+  const sdk = makeAgentSdk(config);
+  const { data } = await sdk.performAgentQuery<true>({
+    body: [...messages],
+    responseTransformer: performAgentQueryResponseTransformer,
+  });
+  return data;
 }
 
 /** Sends the given entities and relationships to the configured Elimity Insights server. */
@@ -172,9 +232,18 @@ export async function performImport(
 
 function makeSdk(config: Config): Sdk {
   const auth = `${config.sourceId}:${config.sourceToken}`;
+  return makeSdkWithAuth(config.baseUrl, auth);
+}
+
+function makeAgentSdk(config: ApiTokenConfig): Sdk {
+  const auth = `${config.tokenId}:${config.tokenSecret}`;
+  return makeSdkWithAuth(config.baseUrl, auth);
+}
+
+function makeSdkWithAuth(baseUrl: string, auth: string): Sdk {
   const con = {
     auth,
-    baseUrl: config.baseUrl,
+    baseUrl,
     throwOnError: true,
   };
   const client = createClient(con);

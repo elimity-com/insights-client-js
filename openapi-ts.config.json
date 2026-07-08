@@ -8,6 +8,10 @@
     "filters": {
       "operations": {
         "include": [
+          "GET /agent/scopes",
+          "GET /agent/sources",
+          "GET /agent/stored-queries",
+          "POST /agent/query",
           "POST /sources/{id}/connector-logs",
           "POST /sources/{id}/snapshots"
         ]

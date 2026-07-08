@@ -10,6 +10,18 @@ import type {
   CreateSourceConnectorLogsData,
   CreateSourceConnectorLogsErrors,
   CreateSourceConnectorLogsResponses,
+  GetAgentScopesData,
+  GetAgentScopesErrors,
+  GetAgentScopesResponses,
+  GetAgentSourcesData,
+  GetAgentSourcesErrors,
+  GetAgentSourcesResponses,
+  GetAgentStoredQueriesData,
+  GetAgentStoredQueriesErrors,
+  GetAgentStoredQueriesResponses,
+  PerformAgentQueryData,
+  PerformAgentQueryErrors,
+  PerformAgentQueryResponses,
   ReloadSourceSnapshotData,
   ReloadSourceSnapshotErrors,
   ReloadSourceSnapshotResponses,
@@ -67,6 +79,66 @@ export class Sdk extends HeyApiClient {
   constructor(args?: { client?: Client; key?: string }) {
     super(args);
     Sdk.__registry.set(this, args?.key);
+  }
+
+  public performAgentQuery<ThrowOnError extends boolean = false>(
+    options: Options<PerformAgentQueryData, ThrowOnError>,
+  ) {
+    return (options.client ?? this.client).post<
+      PerformAgentQueryResponses,
+      PerformAgentQueryErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "basic", type: "http" }],
+      url: "/agent/query",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    });
+  }
+
+  public getAgentScopes<ThrowOnError extends boolean = false>(
+    options?: Options<GetAgentScopesData, ThrowOnError>,
+  ) {
+    return (options?.client ?? this.client).get<
+      GetAgentScopesResponses,
+      GetAgentScopesErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "basic", type: "http" }],
+      url: "/agent/scopes",
+      ...options,
+    });
+  }
+
+  public getAgentSources<ThrowOnError extends boolean = false>(
+    options?: Options<GetAgentSourcesData, ThrowOnError>,
+  ) {
+    return (options?.client ?? this.client).get<
+      GetAgentSourcesResponses,
+      GetAgentSourcesErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "basic", type: "http" }],
+      url: "/agent/sources",
+      ...options,
+    });
+  }
+
+  public getAgentStoredQueries<ThrowOnError extends boolean = false>(
+    options?: Options<GetAgentStoredQueriesData, ThrowOnError>,
+  ) {
+    return (options?.client ?? this.client).get<
+      GetAgentStoredQueriesResponses,
+      GetAgentStoredQueriesErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "basic", type: "http" }],
+      url: "/agent/stored-queries",
+      ...options,
+    });
   }
 
   public createSourceConnectorLogs<ThrowOnError extends boolean = false>(
