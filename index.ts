@@ -5,11 +5,8 @@ import {
   Scope,
   Sdk,
   Source,
+  StoredQuery,
 } from "./openapi";
-import {
-  getAgentSourcesResponseTransformer,
-  performAgentQueryResponseTransformer,
-} from "./openapi/transformers.gen";
 import { Deflate } from "pako";
 import { JsonStreamStringify } from "json-stream-stringify";
 import { Readable } from "node:stream";
@@ -153,9 +150,7 @@ export async function getAgentSources(
   config: ApiTokenConfig,
 ): Promise<readonly Source[]> {
   const sdk = makeAgentSdk(config);
-  const { data } = await sdk.getAgentSources<true>({
-    responseTransformer: getAgentSourcesResponseTransformer,
-  });
+  const { data } = await sdk.getAgentSources<true>();
   return data;
 }
 
@@ -171,9 +166,9 @@ export async function getAgentScopes(
 /** Lists the stored queries accessible with the given API token. */
 export async function getAgentStoredQueries(
   config: ApiTokenConfig,
-): Promise<unknown> {
+): Promise<readonly StoredQuery[]> {
   const sdk = makeAgentSdk(config);
-  const { data } = await sdk.getAgentStoredQueries<true>();
+  const { data } = await sdk.getAgentJsonStoredQueries<true>();
   return data;
 }
 
@@ -195,7 +190,6 @@ export async function performAgentQuery(
   const sdk = makeAgentSdk(config);
   const { data } = await sdk.performAgentQuery<true>({
     body: [...messages],
-    responseTransformer: performAgentQueryResponseTransformer,
   });
   return data;
 }

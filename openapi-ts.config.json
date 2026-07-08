@@ -10,7 +10,7 @@
         "include": [
           "GET /agent/scopes",
           "GET /agent/sources",
-          "GET /agent/stored-queries",
+          "GET /agent/stored-queries;format=json",
           "POST /agent/query",
           "POST /sources/{id}/connector-logs",
           "POST /sources/{id}/snapshots"
@@ -23,7 +23,8 @@
       "name": "@hey-api/sdk",
       "operations": {
         "strategy": "single"
-      }
+      },
+      "transformer": true
     },
     {
       "dates": true,

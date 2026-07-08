@@ -23,8 +23,8 @@ await logInfo(config, "Hello from NodeJS!");
 
 ### API token example
 
-The following snippet shows how to authenticate with an API token and list the sources accessible with that token. 
-You can generate an API token by visiting the advanced settings, selecting the API tokens tab and clicking on 
+The following snippet shows how to authenticate with an API token and list the sources accessible with that token.
+You can generate an API token by visiting the advanced settings, selecting the API tokens tab and clicking on
 'CREATE API TOKEN' in Elimity Insights.
 
 ```js

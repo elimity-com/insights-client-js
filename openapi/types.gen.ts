@@ -23,6 +23,35 @@ export type DateTime = Date;
 
 export type RawMessage = unknown;
 
+export type StoredQueryData = {
+  alias: string;
+  condition: RawMessage;
+  entityType: string;
+};
+
+export type QueryScope = {
+  id: number;
+  name: string;
+};
+
+export type StoredQuery = {
+  description: string;
+  highThreshold: number;
+  id: number;
+  isControl: boolean;
+  mediumThreshold: number;
+  name: string;
+  ownerEmail: string;
+  ownerId: number;
+  resultCountAtLastReload?: number | null;
+  scope?: QueryScope;
+  shared: boolean;
+  sourceId: number;
+  storedQueryData: StoredQueryData;
+};
+
+export type StoredQueries = Array<StoredQuery>;
+
 export type Sources = Array<Source>;
 
 export type RelationshipType = {
@@ -264,14 +293,14 @@ export type GetAgentSourcesResponses = {
 export type GetAgentSourcesResponse =
   GetAgentSourcesResponses[keyof GetAgentSourcesResponses];
 
-export type GetAgentStoredQueriesData = {
+export type GetAgentJsonStoredQueriesData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/agent/stored-queries";
+  url: "/agent/stored-queries;format=json";
 };
 
-export type GetAgentStoredQueriesErrors = {
+export type GetAgentJsonStoredQueriesErrors = {
   /**
    * The requesting user is not authenticated.
    */
@@ -286,12 +315,15 @@ export type GetAgentStoredQueriesErrors = {
   500: unknown;
 };
 
-export type GetAgentStoredQueriesResponses = {
+export type GetAgentJsonStoredQueriesResponses = {
   /**
-   * The stored queries are listed.
+   * The queries are listed.
    */
-  200: unknown;
+  200: StoredQueries;
 };
+
+export type GetAgentJsonStoredQueriesResponse =
+  GetAgentJsonStoredQueriesResponses[keyof GetAgentJsonStoredQueriesResponses];
 
 export type CreateSourceConnectorLogsData = {
   body: ConnectorLogs;

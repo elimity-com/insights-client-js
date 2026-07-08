@@ -6,19 +6,23 @@ import type {
   Options as Options2,
   TDataShape,
 } from "./client/index.js";
+import {
+  getAgentSourcesResponseTransformer,
+  performAgentQueryResponseTransformer,
+} from "./transformers.gen.js";
 import type {
   CreateSourceConnectorLogsData,
   CreateSourceConnectorLogsErrors,
   CreateSourceConnectorLogsResponses,
+  GetAgentJsonStoredQueriesData,
+  GetAgentJsonStoredQueriesErrors,
+  GetAgentJsonStoredQueriesResponses,
   GetAgentScopesData,
   GetAgentScopesErrors,
   GetAgentScopesResponses,
   GetAgentSourcesData,
   GetAgentSourcesErrors,
   GetAgentSourcesResponses,
-  GetAgentStoredQueriesData,
-  GetAgentStoredQueriesErrors,
-  GetAgentStoredQueriesResponses,
   PerformAgentQueryData,
   PerformAgentQueryErrors,
   PerformAgentQueryResponses,
@@ -89,6 +93,7 @@ export class Sdk extends HeyApiClient {
       PerformAgentQueryErrors,
       ThrowOnError
     >({
+      responseTransformer: performAgentQueryResponseTransformer,
       security: [{ scheme: "basic", type: "http" }],
       url: "/agent/query",
       ...options,
@@ -121,22 +126,23 @@ export class Sdk extends HeyApiClient {
       GetAgentSourcesErrors,
       ThrowOnError
     >({
+      responseTransformer: getAgentSourcesResponseTransformer,
       security: [{ scheme: "basic", type: "http" }],
       url: "/agent/sources",
       ...options,
     });
   }
 
-  public getAgentStoredQueries<ThrowOnError extends boolean = false>(
-    options?: Options<GetAgentStoredQueriesData, ThrowOnError>,
+  public getAgentJsonStoredQueries<ThrowOnError extends boolean = false>(
+    options?: Options<GetAgentJsonStoredQueriesData, ThrowOnError>,
   ) {
     return (options?.client ?? this.client).get<
-      GetAgentStoredQueriesResponses,
-      GetAgentStoredQueriesErrors,
+      GetAgentJsonStoredQueriesResponses,
+      GetAgentJsonStoredQueriesErrors,
       ThrowOnError
     >({
       security: [{ scheme: "basic", type: "http" }],
-      url: "/agent/stored-queries",
+      url: "/agent/stored-queries;format=json",
       ...options,
     });
   }
