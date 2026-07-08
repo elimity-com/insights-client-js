@@ -21,6 +21,23 @@ const config = {
 await logInfo(config, "Hello from NodeJS!");
 ```
 
+### API token example
+
+The following snippet shows how to authenticate with an API token and list the sources accessible with that token.
+You can generate an API token by visiting the advanced settings, selecting the API tokens tab and clicking on
+'CREATE API TOKEN' in Elimity Insights.
+
+```js
+import { getAgentSources } from "@elimity/insights-client";
+
+const config = {
+  baseUrl: "https://example.elimity.com/api",
+  tokenId: "my-token-id",
+  tokenSecret: "my-token-secret",
+};
+const sources = await getAgentSources(config);
+```
+
 ### Extended example
 
 Refer to

@@ -6,10 +6,20 @@ import type {
   Options as Options2,
   TDataShape,
 } from "./client/index.js";
+import { getAgentSourcesResponseTransformer } from "./transformers.gen.js";
 import type {
   CreateSourceConnectorLogsData,
   CreateSourceConnectorLogsErrors,
   CreateSourceConnectorLogsResponses,
+  GetAgentJsonStoredQueriesData,
+  GetAgentJsonStoredQueriesErrors,
+  GetAgentJsonStoredQueriesResponses,
+  GetAgentScopesData,
+  GetAgentScopesErrors,
+  GetAgentScopesResponses,
+  GetAgentSourcesData,
+  GetAgentSourcesErrors,
+  GetAgentSourcesResponses,
   ReloadSourceSnapshotData,
   ReloadSourceSnapshotErrors,
   ReloadSourceSnapshotResponses,
@@ -67,6 +77,49 @@ export class Sdk extends HeyApiClient {
   constructor(args?: { client?: Client; key?: string }) {
     super(args);
     Sdk.__registry.set(this, args?.key);
+  }
+
+  public getAgentScopes<ThrowOnError extends boolean = false>(
+    options?: Options<GetAgentScopesData, ThrowOnError>,
+  ) {
+    return (options?.client ?? this.client).get<
+      GetAgentScopesResponses,
+      GetAgentScopesErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "basic", type: "http" }],
+      url: "/agent/scopes",
+      ...options,
+    });
+  }
+
+  public getAgentSources<ThrowOnError extends boolean = false>(
+    options?: Options<GetAgentSourcesData, ThrowOnError>,
+  ) {
+    return (options?.client ?? this.client).get<
+      GetAgentSourcesResponses,
+      GetAgentSourcesErrors,
+      ThrowOnError
+    >({
+      responseTransformer: getAgentSourcesResponseTransformer,
+      security: [{ scheme: "basic", type: "http" }],
+      url: "/agent/sources",
+      ...options,
+    });
+  }
+
+  public getAgentJsonStoredQueries<ThrowOnError extends boolean = false>(
+    options?: Options<GetAgentJsonStoredQueriesData, ThrowOnError>,
+  ) {
+    return (options?.client ?? this.client).get<
+      GetAgentJsonStoredQueriesResponses,
+      GetAgentJsonStoredQueriesErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "basic", type: "http" }],
+      url: "/agent/stored-queries;format=json",
+      ...options,
+    });
   }
 
   public createSourceConnectorLogs<ThrowOnError extends boolean = false>(

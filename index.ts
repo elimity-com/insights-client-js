@@ -1,8 +1,15 @@
-import { ConnectorLogLevel, Sdk } from "./openapi";
+import { ConnectorLogLevel, Scope, Sdk, Source, StoredQuery } from "./openapi";
 import { Deflate } from "pako";
 import { JsonStreamStringify } from "json-stream-stringify";
 import { Readable } from "node:stream";
 import { createClient } from "./openapi/client";
+
+/** Indicates how to connect and authenticate to an Elimity Insights server using an API token. */
+export interface ApiTokenConfig {
+  readonly baseUrl: string;
+  readonly tokenId: string;
+  readonly tokenSecret: string;
+}
 
 /** Represents the assignment of a value for a specific attribute type to a specific entity or relationship. */
 export interface AttributeAssignment {
@@ -130,6 +137,33 @@ export enum ValueType {
   Time = "time",
 }
 
+/** Lists the sources accessible with the given API token. */
+export async function getAgentSources(
+  config: ApiTokenConfig,
+): Promise<readonly Source[]> {
+  const sdk = makeAgentSdk(config);
+  const { data } = await sdk.getAgentSources<true>();
+  return data;
+}
+
+/** Lists the scopes accessible with the given API token. */
+export async function getAgentScopes(
+  config: ApiTokenConfig,
+): Promise<readonly Scope[]> {
+  const sdk = makeAgentSdk(config);
+  const { data } = await sdk.getAgentScopes<true>();
+  return data;
+}
+
+/** Lists the stored queries accessible with the given API token. */
+export async function getAgentStoredQueries(
+  config: ApiTokenConfig,
+): Promise<readonly StoredQuery[]> {
+  const sdk = makeAgentSdk(config);
+  const { data } = await sdk.getAgentJsonStoredQueries<true>();
+  return data;
+}
+
 /** Sends the given warning log to the configured Elimity Insights server. */
 export function logAlert(config: Config, message: string): Promise<void> {
   return log(config, "alert", message);
@@ -172,9 +206,18 @@ export async function performImport(
 
 function makeSdk(config: Config): Sdk {
   const auth = `${config.sourceId}:${config.sourceToken}`;
+  return makeSdkWithAuth(config.baseUrl, auth);
+}
+
+function makeAgentSdk(config: ApiTokenConfig): Sdk {
+  const auth = `${config.tokenId}:${config.tokenSecret}`;
+  return makeSdkWithAuth(config.baseUrl, auth);
+}
+
+function makeSdkWithAuth(baseUrl: string, auth: string): Sdk {
   const con = {
     auth,
-    baseUrl: config.baseUrl,
+    baseUrl,
     throwOnError: true,
   };
   const client = createClient(con);

@@ -4,9 +4,122 @@ export type ClientOptions = {
   baseUrl: `${string}://${string}/api` | (string & {});
 };
 
+export type Type =
+  | "boolean"
+  | "number"
+  | "string"
+  | "date"
+  | "dateTime"
+  | "time";
+
+export type OptionalDateTime = Date | null;
+
 export type DateTime = Date;
 
+export type RawMessage = unknown;
+
+export type StoredQueryData = {
+  alias: string;
+  condition: RawMessage;
+  entityType: string;
+};
+
+export type QueryScope = {
+  id: number;
+  name: string;
+};
+
+export type StoredQuery = {
+  description: string;
+  highThreshold: number;
+  id: number;
+  isControl: boolean;
+  mediumThreshold: number;
+  name: string;
+  ownerEmail: string;
+  ownerId: number;
+  resultCountAtLastReload?: number | null;
+  scope?: QueryScope;
+  shared: boolean;
+  sourceId: number;
+  storedQueryData: StoredQueryData;
+};
+
+export type StoredQueries = Array<StoredQuery>;
+
+export type Sources = Array<Source>;
+
+export type RelationshipType = {
+  fromEntityTypeId: string;
+  id: number;
+  toEntityTypeId: string;
+};
+
+export type RelationshipTypes = Array<RelationshipType>;
+
+export type RelationshipAttributeType = {
+  archived: boolean;
+  childType: string;
+  description?: string | null;
+  id: string;
+  name: string;
+  parentType: string;
+  type: Type;
+};
+
+export type RelationshipAttributeTypes = Array<RelationshipAttributeType>;
+
+export type EntityType = {
+  anonymized: boolean;
+  icon: string;
+  id: string;
+  plural: string;
+  singular: string;
+};
+
+export type EntityTypes = Array<EntityType>;
+
+export type AttributeType = {
+  archived: boolean;
+  description: string;
+  entityTypeId: string;
+  id: string;
+  name: string;
+  type: Type;
+};
+
+export type AttributeTypes = Array<AttributeType>;
+
+export type DomainGraphSchema = {
+  entityAttributeTypes: AttributeTypes;
+  entityTypes: EntityTypes;
+  relationshipAttributeTypes: RelationshipAttributeTypes;
+  relationshipTypes: RelationshipTypes;
+};
+
+export type Source = {
+  archived: boolean;
+  builtInConnectorId: string;
+  domainGraphSchema: DomainGraphSchema;
+  id: number;
+  importsAllowed: boolean;
+  lastReloadTimestamp?: OptionalDateTime;
+  name: string;
+};
+
 export type Snapshot = Blob | File;
+
+export type Scopes = Array<Scope>;
+
+export type Scope = {
+  description: string;
+  id: number;
+  name: string;
+  ownerEmail: string;
+  ownerId: number;
+  shared: boolean;
+  showTotalCount: boolean;
+};
 
 export type ConnectorLogLevel = "info" | "alert";
 
@@ -17,6 +130,102 @@ export type ConnectorLog = {
 };
 
 export type ConnectorLogs = Array<ConnectorLog>;
+
+export type GetAgentScopesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/agent/scopes";
+};
+
+export type GetAgentScopesErrors = {
+  /**
+   * The requesting user is not authenticated.
+   */
+  401: unknown;
+  /**
+   * The requesting user is not authorized to perform this request.
+   */
+  403: unknown;
+  /**
+   * The server experienced an error during the handling of the given request.
+   */
+  500: unknown;
+};
+
+export type GetAgentScopesResponses = {
+  /**
+   * The scopes are listed.
+   */
+  200: Scopes;
+};
+
+export type GetAgentScopesResponse =
+  GetAgentScopesResponses[keyof GetAgentScopesResponses];
+
+export type GetAgentSourcesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/agent/sources";
+};
+
+export type GetAgentSourcesErrors = {
+  /**
+   * The requesting user is not authenticated.
+   */
+  401: unknown;
+  /**
+   * The requesting user is not authorized to perform this request.
+   */
+  403: unknown;
+  /**
+   * The server experienced an error during the handling of the given request.
+   */
+  500: unknown;
+};
+
+export type GetAgentSourcesResponses = {
+  /**
+   * The sources are listed.
+   */
+  200: Sources;
+};
+
+export type GetAgentSourcesResponse =
+  GetAgentSourcesResponses[keyof GetAgentSourcesResponses];
+
+export type GetAgentJsonStoredQueriesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/agent/stored-queries;format=json";
+};
+
+export type GetAgentJsonStoredQueriesErrors = {
+  /**
+   * The requesting user is not authenticated.
+   */
+  401: unknown;
+  /**
+   * The requesting user is not authorized to perform this request.
+   */
+  403: unknown;
+  /**
+   * The server experienced an error during the handling of the given request.
+   */
+  500: unknown;
+};
+
+export type GetAgentJsonStoredQueriesResponses = {
+  /**
+   * The queries are listed.
+   */
+  200: StoredQueries;
+};
+
+export type GetAgentJsonStoredQueriesResponse =
+  GetAgentJsonStoredQueriesResponses[keyof GetAgentJsonStoredQueriesResponses];
 
 export type CreateSourceConnectorLogsData = {
   body: ConnectorLogs;
