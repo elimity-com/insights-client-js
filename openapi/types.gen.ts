@@ -4,30 +4,102 @@ export type ClientOptions = {
   baseUrl: `${string}://${string}/api` | (string & {});
 };
 
-export type Type =
-  | "boolean"
-  | "number"
-  | "string"
-  | "date"
-  | "dateTime"
-  | "time";
+export type AttributeType = {
+  archived: boolean;
+  description: string;
+  entityTypeId: string;
+  id: string;
+  name: string;
+  type: Type;
+};
 
-export type OptionalDateTime = Date | null;
+export type AttributeTypes = Array<AttributeType>;
+
+export type ConnectorLog = {
+  level: ConnectorLogLevel;
+  message: string;
+  timestamp: DateTime;
+};
+
+export type ConnectorLogLevel = "info" | "alert";
+
+export type ConnectorLogs = Array<ConnectorLog>;
 
 export type DateTime = Date;
 
-export type RawMessage = unknown;
-
-export type StoredQueryData = {
-  alias: string;
-  condition: RawMessage;
-  entityType: string;
+export type DomainGraphSchema = {
+  entityAttributeTypes: AttributeTypes;
+  entityTypes: EntityTypes;
+  relationshipAttributeTypes: RelationshipAttributeTypes;
+  relationshipTypes: RelationshipTypes;
 };
+
+export type EntityType = {
+  anonymized: boolean;
+  icon: string;
+  id: string;
+  plural: string;
+  singular: string;
+};
+
+export type EntityTypes = Array<EntityType>;
+
+export type OptionalDateTime = Date | null;
 
 export type QueryScope = {
   id: number;
   name: string;
 };
+
+export type RawMessage = unknown;
+
+export type RelationshipAttributeType = {
+  archived: boolean;
+  childType: string;
+  description?: string | null;
+  id: string;
+  name: string;
+  parentType: string;
+  type: Type;
+};
+
+export type RelationshipAttributeTypes = Array<RelationshipAttributeType>;
+
+export type RelationshipType = {
+  fromEntityTypeId: string;
+  id: number;
+  toEntityTypeId: string;
+};
+
+export type RelationshipTypes = Array<RelationshipType>;
+
+export type Scope = {
+  description: string;
+  id: number;
+  name: string;
+  ownerEmail: string;
+  ownerId: number;
+  shared: boolean;
+  showTotalCount: boolean;
+};
+
+export type Scopes = Array<Scope>;
+
+export type Snapshot = Blob | File;
+
+export type Source = {
+  archived: boolean;
+  builtInConnectorId: string;
+  domainGraphSchema: DomainGraphSchema;
+  id: number;
+  importsAllowed: boolean;
+  lastReloadTimestamp?: OptionalDateTime;
+  name: string;
+};
+
+export type Sources = Array<Source>;
+
+export type StoredQueries = Array<StoredQuery>;
 
 export type StoredQuery = {
   description: string;
@@ -45,91 +117,19 @@ export type StoredQuery = {
   storedQueryData: StoredQueryData;
 };
 
-export type StoredQueries = Array<StoredQuery>;
-
-export type Sources = Array<Source>;
-
-export type RelationshipType = {
-  fromEntityTypeId: string;
-  id: number;
-  toEntityTypeId: string;
+export type StoredQueryData = {
+  alias: string;
+  condition: RawMessage;
+  entityType: string;
 };
 
-export type RelationshipTypes = Array<RelationshipType>;
-
-export type RelationshipAttributeType = {
-  archived: boolean;
-  childType: string;
-  description?: string | null;
-  id: string;
-  name: string;
-  parentType: string;
-  type: Type;
-};
-
-export type RelationshipAttributeTypes = Array<RelationshipAttributeType>;
-
-export type EntityType = {
-  anonymized: boolean;
-  icon: string;
-  id: string;
-  plural: string;
-  singular: string;
-};
-
-export type EntityTypes = Array<EntityType>;
-
-export type AttributeType = {
-  archived: boolean;
-  description: string;
-  entityTypeId: string;
-  id: string;
-  name: string;
-  type: Type;
-};
-
-export type AttributeTypes = Array<AttributeType>;
-
-export type DomainGraphSchema = {
-  entityAttributeTypes: AttributeTypes;
-  entityTypes: EntityTypes;
-  relationshipAttributeTypes: RelationshipAttributeTypes;
-  relationshipTypes: RelationshipTypes;
-};
-
-export type Source = {
-  archived: boolean;
-  builtInConnectorId: string;
-  domainGraphSchema: DomainGraphSchema;
-  id: number;
-  importsAllowed: boolean;
-  lastReloadTimestamp?: OptionalDateTime;
-  name: string;
-};
-
-export type Snapshot = Blob | File;
-
-export type Scopes = Array<Scope>;
-
-export type Scope = {
-  description: string;
-  id: number;
-  name: string;
-  ownerEmail: string;
-  ownerId: number;
-  shared: boolean;
-  showTotalCount: boolean;
-};
-
-export type ConnectorLogLevel = "info" | "alert";
-
-export type ConnectorLog = {
-  level: ConnectorLogLevel;
-  message: string;
-  timestamp: DateTime;
-};
-
-export type ConnectorLogs = Array<ConnectorLog>;
+export type Type =
+  | "boolean"
+  | "number"
+  | "string"
+  | "date"
+  | "dateTime"
+  | "time";
 
 export type GetAgentScopesData = {
   body?: never;
