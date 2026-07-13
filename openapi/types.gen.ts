@@ -4,19 +4,19 @@ export type ClientOptions = {
   baseUrl: `${string}://${string}/api` | (string & {});
 };
 
-export type DateTime = Date;
-
-export type Snapshot = Blob | File;
-
-export type ConnectorLogLevel = "info" | "alert";
-
 export type ConnectorLog = {
   level: ConnectorLogLevel;
   message: string;
   timestamp: DateTime;
 };
 
+export type ConnectorLogLevel = "info" | "alert";
+
 export type ConnectorLogs = Array<ConnectorLog>;
+
+export type DateTime = Date;
+
+export type Snapshot = Blob | File;
 
 export type CreateSourceConnectorLogsData = {
   body: ConnectorLogs;
