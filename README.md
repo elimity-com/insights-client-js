@@ -38,6 +38,21 @@ const config = {
 const sources = await getAgentSources(config);
 ```
 
+### Listing linking strategies
+
+The following snippet lists the linking strategies accessible with a given API token.
+
+```js
+import { getAgentLinkingStrategies } from "@elimity/insights-client";
+
+const config = {
+  baseUrl: "https://example.elimity.com/api",
+  tokenId: "my-token-id",
+  tokenSecret: "my-token-secret",
+};
+const linkingStrategies = await getAgentLinkingStrategies(config);
+```
+
 ### Extended example
 
 Refer to

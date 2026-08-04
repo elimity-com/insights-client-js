@@ -1,6 +1,6 @@
 jobs:
   eslint:
-    container: ghcr.io/elimity-com/insights-client-js:28927423669
+    container: ghcr.io/elimity-com/insights-client-js:30891962740
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -8,7 +8,7 @@ jobs:
       - run: npx eslint .
 
   openapi-ts:
-    container: ghcr.io/elimity-com/insights-client-js:28927423669
+    container: ghcr.io/elimity-com/insights-client-js:30891962740
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -17,7 +17,7 @@ jobs:
       - run: git -c safe.directory=/__w/insights-client-js/insights-client-js diff --quiet
 
   prettier:
-    container: ghcr.io/elimity-com/insights-client-js:28927423669
+    container: ghcr.io/elimity-com/insights-client-js:30891962740
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +25,7 @@ jobs:
       - run: npx prettier -c .
 
   tsc:
-    container: ghcr.io/elimity-com/insights-client-js:28927423669
+    container: ghcr.io/elimity-com/insights-client-js:30891962740
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4

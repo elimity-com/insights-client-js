@@ -11,6 +11,7 @@
           "GET /agent/scopes",
           "GET /agent/sources",
           "GET /agent/stored-queries;format=json",
+          "GET /agent/linking-strategies",
           "POST /sources/{id}/connector-logs",
           "POST /sources/{id}/snapshots"
         ]

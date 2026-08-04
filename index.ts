@@ -1,4 +1,11 @@
-import { ConnectorLogLevel, Scope, Sdk, Source, StoredQuery } from "./openapi";
+import {
+  ConnectorLogLevel,
+  LinkingStrategy,
+  Scope,
+  Sdk,
+  Source,
+  StoredQuery,
+} from "./openapi";
 import { Deflate } from "pako";
 import { JsonStreamStringify } from "json-stream-stringify";
 import { Readable } from "node:stream";
@@ -161,6 +168,15 @@ export async function getAgentStoredQueries(
 ): Promise<readonly StoredQuery[]> {
   const sdk = makeAgentSdk(config);
   const { data } = await sdk.getAgentJsonStoredQueries<true>();
+  return data;
+}
+
+/** Lists the linking strategies accessible with the given API token. */
+export async function getAgentLinkingStrategies(
+  config: ApiTokenConfig,
+): Promise<readonly LinkingStrategy[]> {
+  const sdk = makeAgentSdk(config);
+  const { data } = await sdk.getAgentLinkingStrategies<true>();
   return data;
 }
 

@@ -30,10 +30,12 @@ export type QueryScope = {
 };
 
 export type StoredQuery = {
+  buildHistory: boolean;
   description: string;
   highThreshold: number;
   id: number;
   isControl: boolean;
+  lastImportEvaluationDurationMs?: number | null;
   mediumThreshold: number;
   name: string;
   ownerEmail: string;
@@ -121,6 +123,33 @@ export type Scope = {
   showTotalCount: boolean;
 };
 
+export type MatchOperator =
+  | "contains"
+  | "endsWith"
+  | "equals"
+  | "isPrefixOf"
+  | "isSubstringOf"
+  | "isSuffixOf"
+  | "startsWith";
+
+export type LinkingStrategyProperty = "id" | "name";
+
+export type LinkingStrategy = {
+  fromAttributeTypeId?: string;
+  fromEntityTypeId: string;
+  fromProperty?: LinkingStrategyProperty;
+  fromSourceId: number;
+  id: number;
+  matchCaseSensitive: boolean;
+  matchOperator: MatchOperator;
+  toAttributeTypeId?: string;
+  toEntityTypeId: string;
+  toProperty?: LinkingStrategyProperty;
+  toSourceId: number;
+};
+
+export type LinkingStrategies = Array<LinkingStrategy>;
+
 export type ConnectorLogLevel = "info" | "alert";
 
 export type ConnectorLog = {
@@ -130,6 +159,38 @@ export type ConnectorLog = {
 };
 
 export type ConnectorLogs = Array<ConnectorLog>;
+
+export type GetAgentLinkingStrategiesData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/agent/linking-strategies";
+};
+
+export type GetAgentLinkingStrategiesErrors = {
+  /**
+   * The requesting user is not authenticated.
+   */
+  401: unknown;
+  /**
+   * The requesting user is not authorized to perform this request.
+   */
+  403: unknown;
+  /**
+   * The server experienced an error during the handling of the given request.
+   */
+  500: unknown;
+};
+
+export type GetAgentLinkingStrategiesResponses = {
+  /**
+   * The linking strategies are listed.
+   */
+  200: LinkingStrategies;
+};
+
+export type GetAgentLinkingStrategiesResponse =
+  GetAgentLinkingStrategiesResponses[keyof GetAgentLinkingStrategiesResponses];
 
 export type GetAgentScopesData = {
   body?: never;
