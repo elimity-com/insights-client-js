@@ -3,7 +3,9 @@
 import { client } from "./client.gen.js";
 import type {
   Client,
+  ClientMeta,
   Options as Options2,
+  RequestResult,
   TDataShape,
 } from "./client/index.js";
 import { getAgentSourcesResponseTransformer } from "./transformers.gen.js";
@@ -43,7 +45,7 @@ export type Options<
    * You can pass arbitrary values through the `meta` object. This can be
    * used to access values that aren't defined as part of the SDK function.
    */
-  meta?: Record<string, unknown>;
+  meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
 };
 
 class HeyApiClient {
@@ -75,7 +77,8 @@ class HeyApiRegistry<T> {
 }
 
 export class Sdk extends HeyApiClient {
-  public static readonly __registry = new HeyApiRegistry<Sdk>();
+  public static readonly __registry: HeyApiRegistry<Sdk> =
+    new HeyApiRegistry<Sdk>();
 
   constructor(args?: { client?: Client; key?: string }) {
     super(args);
@@ -141,13 +144,23 @@ export class Sdk extends HeyApiClient {
 
   public createSourceConnectorLogs<ThrowOnError extends boolean = false>(
     options: Options<CreateSourceConnectorLogsData, ThrowOnError>,
-  ) {
+  ): RequestResult<
+    CreateSourceConnectorLogsResponses,
+    CreateSourceConnectorLogsErrors,
+    ThrowOnError
+  > {
     return (options.client ?? this.client).post<
       CreateSourceConnectorLogsResponses,
       CreateSourceConnectorLogsErrors,
       ThrowOnError
     >({
-      security: [{ scheme: "basic", type: "http" }],
+      security: [
+        {
+          key: "source",
+          scheme: "basic",
+          type: "http",
+        },
+      ],
       url: "/sources/{id}/connector-logs",
       ...options,
       headers: {
@@ -159,7 +172,11 @@ export class Sdk extends HeyApiClient {
 
   public reloadSourceSnapshot<ThrowOnError extends boolean = false>(
     options: Options<ReloadSourceSnapshotData, ThrowOnError>,
-  ) {
+  ): RequestResult<
+    ReloadSourceSnapshotResponses,
+    ReloadSourceSnapshotErrors,
+    ThrowOnError
+  > {
     return (options.client ?? this.client).post<
       ReloadSourceSnapshotResponses,
       ReloadSourceSnapshotErrors,
@@ -167,8 +184,16 @@ export class Sdk extends HeyApiClient {
     >({
       bodySerializer: null,
       security: [
-        { scheme: "basic", type: "http" },
-        { name: "Cookie", type: "apiKey" },
+        {
+          key: "source",
+          scheme: "basic",
+          type: "http",
+        },
+        {
+          key: "member",
+          name: "Cookie",
+          type: "apiKey",
+        },
       ],
       url: "/sources/{id}/snapshots",
       ...options,

@@ -158,6 +158,8 @@ export type ConnectorLog = {
   timestamp: DateTime;
 };
 
+export type ConnectorLogLevel = "info" | "alert";
+
 export type ConnectorLogs = Array<ConnectorLog>;
 
 export type GetAgentLinkingStrategiesData = {
