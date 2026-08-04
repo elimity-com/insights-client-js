@@ -16,6 +16,9 @@ import type {
   GetAgentJsonStoredQueriesData,
   GetAgentJsonStoredQueriesErrors,
   GetAgentJsonStoredQueriesResponses,
+  GetAgentLinkingStrategiesData,
+  GetAgentLinkingStrategiesErrors,
+  GetAgentLinkingStrategiesResponses,
   GetAgentScopesData,
   GetAgentScopesErrors,
   GetAgentScopesResponses,
@@ -80,6 +83,30 @@ export class Sdk extends HeyApiClient {
   constructor(args?: { client?: Client; key?: string }) {
     super(args);
     Sdk.__registry.set(this, args?.key);
+  }
+
+  public getAgentLinkingStrategies<ThrowOnError extends boolean = false>(
+    options?: Options<GetAgentLinkingStrategiesData, ThrowOnError>,
+  ): RequestResult<
+    GetAgentLinkingStrategiesResponses,
+    GetAgentLinkingStrategiesErrors,
+    ThrowOnError
+  > {
+    return (options?.client ?? this.client).get<
+      GetAgentLinkingStrategiesResponses,
+      GetAgentLinkingStrategiesErrors,
+      ThrowOnError
+    >({
+      security: [
+        {
+          key: "apiToken",
+          scheme: "basic",
+          type: "http",
+        },
+      ],
+      url: "/agent/linking-strategies",
+      ...options,
+    });
   }
 
   public getAgentScopes<ThrowOnError extends boolean = false>(

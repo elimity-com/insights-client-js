@@ -8,6 +8,7 @@
     "filters": {
       "operations": {
         "include": [
+          "GET /agent/linking-strategies",
           "GET /agent/scopes",
           "GET /agent/sources",
           "GET /agent/stored-queries;format=json",
